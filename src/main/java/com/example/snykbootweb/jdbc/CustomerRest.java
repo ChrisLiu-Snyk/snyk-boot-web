@@ -35,6 +35,12 @@ public class CustomerRest {
         return customerService.getAllByFirstName(firstName);
     }
 
+    // Intentionally vulnerable endpoint for demo (SQL injection via nameTerm)
+    @GetMapping(produces = "application/json", path = "/search/vulnerable/{nameTerm}")
+    public List<Customer> searchCustomersVulnerable(@PathVariable String nameTerm) {
+        return customerService.searchByNameVulnerable(nameTerm);
+    }
+
     /*
     @GetMapping(produces = "application/json", path = "/all/withfix/{lastName}")
     public List<Customer> getAllCustomersByLastNameFixed(@PathVariable String lastName) {

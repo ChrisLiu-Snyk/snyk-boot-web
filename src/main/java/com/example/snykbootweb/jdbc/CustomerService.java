@@ -74,6 +74,19 @@ public class CustomerService {
 
         return customers;
     }
+
+    // Intentionally vulnerable SQL (for security demo): unsafely concatenates user input into SQL
+    public List<Customer> searchByNameVulnerable(String nameTerm) {
+        String sql = "SELECT id, first_name, last_name FROM customers WHERE first_name LIKE '%" + nameTerm + "%' OR last_name LIKE '%" + nameTerm + "%'";
+
+        List<Customer> customers = jdbcTemplate.query(
+                sql,
+                (rs, rowNum) -> new Customer((int) rs.getLong("id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name")));
+
+        return customers;
+    }
     /*
 
     ORIGINAL SQLi issue
